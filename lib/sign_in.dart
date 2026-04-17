@@ -1,5 +1,5 @@
 import 'package:book_app/forget.dart';
-import 'package:book_app/home.dart';
+import 'package:book_app/bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 class SignIn extends StatefulWidget {
@@ -29,7 +29,7 @@ class _SignInState extends State<SignIn> {
     if (email == "user@gmail.com" && password == "123456") {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const Home()),
+        MaterialPageRoute(builder: (context) => const BottomBar()),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

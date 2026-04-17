@@ -85,9 +85,25 @@ class _HomeState extends State<Home> {
     return Scaffold(
       backgroundColor: Color(0xffF5F5F5),
       appBar: AppBar(
-        backgroundColor: Color(0xff8B5E34),
+        backgroundColor: const Color(0xff8B5E34),
         elevation: 0,
         automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text(
+              "9:41",
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
+            Row(
+              children: const [
+                Icon(Icons.wifi, size: 16),
+                SizedBox(width: 5),
+                Icon(Icons.battery_full, size: 16),
+              ],
+            ),
+          ],
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -264,7 +280,7 @@ class _HomeState extends State<Home> {
   Widget bookCard(Map book) {
     return InkWell(
       onTap: () {
-        // Boiyer upore click korle BookDetails page-e niye jabe
+        // [NAVIGATION LOGIC]: Boiyer upore click korle detail page-e niye jabe
         Navigator.push(
           context,
           MaterialPageRoute(

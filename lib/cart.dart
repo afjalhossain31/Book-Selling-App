@@ -7,7 +7,23 @@ class Cart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Your Cart", style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.brown,
+        automaticallyImplyLeading: true,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text("9:41", style: TextStyle(fontSize: 14)),
+            const Text("Your Cart",
+                style: TextStyle(color: Colors.white, fontSize: 18)),
+            Row(
+              children: const [
+                Icon(Icons.wifi, size: 16),
+                SizedBox(width: 5),
+                Icon(Icons.battery_full, size: 16),
+              ],
+            ),
+          ],
+        ),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -84,7 +100,7 @@ class Cart extends StatelessWidget {
           const SizedBox(height: 200),
           InkWell(
             onTap: () {
-              // Payment page-e niye jabe
+              // [NAVIGATION]: Your Cart page theke Payment process shuru korar logic
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -103,7 +119,7 @@ class Cart extends StatelessWidget {
               ),
               child: const Center(
                 child: Text(
-                  "Checkout", // "Add To Cart" er bodole "Checkout" dilam
+                  "Checkout", // Order complete korar prothom dhap
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: Colors.white,

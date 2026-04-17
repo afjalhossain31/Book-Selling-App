@@ -20,8 +20,23 @@ class _PaymentState extends State<Payment> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Payment Method", style: TextStyle(color: Colors.white)),
-        backgroundColor: Color(0xffA78D78),
+        backgroundColor: const Color(0xffA78D78),
+        automaticallyImplyLeading: true,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text("9:41", style: TextStyle(fontSize: 14)),
+            const Text("Payment Method",
+                style: TextStyle(color: Colors.white, fontSize: 18)),
+            Row(
+              children: const [
+                Icon(Icons.wifi, size: 16),
+                SizedBox(width: 5),
+                Icon(Icons.battery_full, size: 16),
+              ],
+            ),
+          ],
+        ),
       ),
 
       body: Padding(

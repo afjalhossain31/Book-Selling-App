@@ -7,7 +7,24 @@ class Menu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Colors.brown,
+        automaticallyImplyLeading: false,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text("9:41", style: TextStyle(fontSize: 14)),
+            const Text("Menu", style: TextStyle(color: Colors.white, fontSize: 18)),
+            Row(
+              children: const [
+                Icon(Icons.wifi, size: 16),
+                SizedBox(width: 5),
+                Icon(Icons.battery_full, size: 16),
+              ],
+            ),
+          ],
+        ),
+      ),
       body: ListView(
         scrollDirection: Axis.vertical,
         children: [

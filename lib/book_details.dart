@@ -7,9 +7,24 @@ class BookDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Book Details",
-          style: TextStyle(color: Colors.white),
+        backgroundColor: Colors.brown,
+        automaticallyImplyLeading: true,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            const Text("9:41", style: TextStyle(fontSize: 14)),
+            const Text(
+              "Book Details",
+              style: TextStyle(color: Colors.white, fontSize: 18),
+            ),
+            Row(
+              children: const [
+                Icon(Icons.wifi, size: 16),
+                SizedBox(width: 5),
+                Icon(Icons.battery_full, size: 16),
+              ],
+            ),
+          ],
         ),
       ),
       body: Column(
