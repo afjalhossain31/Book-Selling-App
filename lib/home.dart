@@ -8,32 +8,77 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final List books = [
+
+  // Amader kache thaka shob boiyer main list 
+  final List<Map<String, String>> books = [
     {
       "image": "assets/images/b1.jpg",
       "title": "বাংলা উপন্যাস",
       "author": "Author 1",
       "price": "\$25.00",
+      "isbn": "123-456",
     },
     {
       "image": "assets/images/b2.jpeg",
       "title": "Novel Book",
       "author": "Author 2",
       "price": "\$30.00",
+      "isbn": "789-012",
     },
     {
       "image": "assets/images/b3.jpeg",
       "title": "Spring Story",
       "author": "Author 3",
       "price": "\$20.00",
+      "isbn": "345-678",
     },
     {
       "image": "assets/images/b4.jpeg",
       "title": "Himu",
       "author": "Humayun Ahmed",
       "price": "\$18.00",
+      "isbn": "901-234",
     },
   ];
+
+  // Screen-e jeta display korbo sheita filtered list create korlam
+  List<Map<String, String>> filteredBooks = [];
+  final TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // App start haoyar shomoy shuru-te shob boi-e dekhabe
+    filteredBooks = List.from(books);
+  }
+
+  // Search filter korar jonno logic add korlam
+  void _runFilter(String enteredKeyword) {
+    List<Map<String, String>> results = [];
+    if (enteredKeyword.isEmpty) {
+      // Jodi search box faka thake, taile main list results-e rakhbo
+      results = books;
+    } else {
+      // Boiyer Title, Author ba ISBN-er sathe match korle results list-e add korsi
+      results = books
+          .where((book) =>
+              book["title"]!
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()) ||
+              book["author"]!
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()) ||
+              book["isbn"]!
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()))
+          .toList();
+    }
+
+    // Search results peye gele state/UI update korar jonno setState use korsi
+    setState(() {
+      filteredBooks = results;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,8 +97,10 @@ class _HomeState extends State<Home> {
             Padding(
               padding: const EdgeInsets.all(16),
               child: TextField(
+                controller: searchController,
+                onChanged: (value) => _runFilter(value), // Proti word type korlei filter hobe
                 decoration: InputDecoration(
-                  hintText: "Happy reading",
+                  hintText: "Search by title, author or ISBN",
                   filled: true,
                   fillColor: Colors.grey[300],
                   suffixIcon: Icon(Icons.search),
@@ -157,13 +204,13 @@ class _HomeState extends State<Home> {
               child: GridView.builder(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
-                itemCount: books.length,
+                itemCount: filteredBooks.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   childAspectRatio: 0.65,
                 ),
                 itemBuilder: (context, index) {
-                  return bookCard(books[index]);
+                  return bookCard(filteredBooks[index]);
                 },
               ),
             ),
@@ -206,53 +253,65 @@ class _HomeState extends State<Home> {
       height: 230,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: books.length,
+        itemCount: filteredBooks.length,
         itemBuilder: (context, index) {
-          return bookCard(books[index]);
+          return bookCard(filteredBooks[index]);
         },
       ),
     );
   }
 
   Widget bookCard(Map book) {
-    return Container(
-      width: 150,
-      margin: EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Color(0xff8B5E34),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        children: [
-          Expanded(
-            child: Padding(
+    return InkWell(
+      onTap: () {
+        // Boiyer upore click korle BookDetails page-e niye jabe
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const BookDetails(),
+          ),
+        );
+      },
+      child: Container(
+        width: 150,
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: const Color(0xff8B5E34),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Image.asset(book["image"], fit: BoxFit.cover),
+              ),
+            ),
+            Padding(
               padding: const EdgeInsets.all(8),
-              child: Image.asset(book["image"], fit: BoxFit.cover),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Classics",
+                      style: TextStyle(color: Colors.white70)),
+                  Text(
+                    book["title"],
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                  Text(
+                    book["author"],
+                    style: const TextStyle(color: Colors.white70, fontSize: 12),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    book["price"],
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Classics", style: TextStyle(color: Colors.white70)),
-                Text(
-                  book["title"],
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-                Text(
-                  book["author"],
-                  style: TextStyle(color: Colors.white70, fontSize: 12),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  book["price"],
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

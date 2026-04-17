@@ -81,37 +81,33 @@ class Cart extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 200),
+          const SizedBox(height: 200),
           InkWell(
             onTap: () {
+              // Payment page-e niye jabe
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return (const Payment());
+                    return const Payment();
                   },
                 ),
               );
             },
-
             child: Container(
               width: 400,
               height: 50,
-              color: Colors.teal,
-              child: Container(
-                width: 100,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Color(0xffA78D78),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Text(
-                    "Add To Cart",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+              decoration: BoxDecoration(
+                color: const Color(0xffA78D78),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Center(
+                child: Text(
+                  "Checkout", // "Add To Cart" er bodole "Checkout" dilam
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontSize: 18,
                   ),
                 ),
               ),
