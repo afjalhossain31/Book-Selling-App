@@ -1,25 +1,32 @@
+import 'package:book_app/cart_manager.dart';
 import 'package:book_app/payment.dart';
 import 'package:flutter/material.dart';
 
-class Cart extends StatelessWidget {
-  final Map<String, String>? book; // Nullable kora holo jate direct access kora jay
+class Cart extends StatefulWidget {
+  final Map<String, String>? book;
 
   const Cart({super.key, this.book});
 
   @override
-  Widget build(BuildContext context) {
-    // Default boiyer data jodi kono boi select na kora thake
-    final Map<String, String> displayBook = book ?? {
-      "image": "assets/images/b1.jpg",
-      "title": "Default Book",
-      "author": "Unknown Author",
-      "price": "0.00 Tk",
-    };
+  State<Cart> createState() => _CartState();
+}
 
-    // Price text theke number-e convert kora (e.g., "$25.00" -> 25.0)
-    double bookPrice = double.tryParse(displayBook["price"]!.replaceAll(RegExp(r'[^0-9.]'), '')) ?? 0.0;
-    double shippingFee = 70.0; // Fixed shipping fee
-    double total = bookPrice + shippingFee;
+class _CartState extends State<Cart> {
+  @override
+  void initState() {
+    super.initState();
+    // Add to cart jodi direct pass kora hoy (previous logic maintain)
+    if (widget.book != null) {
+      CartManager().addToCart(widget.book!);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cartItems = CartManager().items;
+    double subtotal = CartManager().calculateSubtotal();
+    double shippingFee = cartItems.isEmpty ? 0.0 : 70.0;
+    double total = subtotal + shippingFee;
 
     return Scaffold(
       appBar: AppBar(
@@ -29,8 +36,7 @@ class Cart extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text("9:41", style: TextStyle(fontSize: 14)),
-            const Text("Your Cart",
-                style: TextStyle(color: Colors.white, fontSize: 18)),
+            const Text("Your Cart", style: TextStyle(color: Colors.white, fontSize: 18)),
             Row(
               children: const [
                 Icon(Icons.wifi, size: 16),
@@ -41,139 +47,129 @@ class Cart extends StatelessWidget {
           ],
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(height: 15),
-          Center(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.brown,
-                borderRadius: BorderRadius.circular(11),
-              ),
-              height: 120,
-              width: 350,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(displayBook["image"]!, height: 100, width: 70, fit: BoxFit.cover),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          displayBook["title"]!,
-                          style: const TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          displayBook["price"]!,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white70,
+      body: cartItems.isEmpty
+          ? const Center(child: Text("Your cart is empty!", style: TextStyle(fontSize: 18)))
+          : Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: cartItems.length,
+                    itemBuilder: (context, index) {
+                      final item = cartItems[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.brown,
+                            borderRadius: BorderRadius.circular(11),
+                          ),
+                          height: 100,
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.asset(item["image"]!, height: 80, width: 60, fit: BoxFit.cover),
+                                ),
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        item["title"]!,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                        item["price"]!,
+                                        style: const TextStyle(fontSize: 16, color: Colors.white70),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete, color: Colors.white70),
+                                onPressed: () {
+                                  setState(() {
+                                    cartItems.removeAt(index);
+                                  });
+                                },
+                              )
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 30),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  "Order Summary :",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Color.fromARGB(255, 188, 96, 39),
-                    fontSize: 22,
+                      );
+                    },
                   ),
                 ),
-                const SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Subtotal:", style: TextStyle(fontSize: 18)),
-                    Text(displayBook["price"]!, style: const TextStyle(fontSize: 18)),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text("Shipping fee:", style: TextStyle(fontSize: 18)),
-                    const Text("70.00 Tk", style: TextStyle(fontSize: 18)),
-                  ],
-                ),
-                const Divider(height: 40, thickness: 1),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Total:",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "${total.toStringAsFixed(2)} Tk",
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.brown),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Order Summary :",
+                        style: TextStyle(fontWeight: FontWeight.bold, color: Colors.orange, fontSize: 22),
+                      ),
+                      const SizedBox(height: 15),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Subtotal:", style: TextStyle(fontSize: 18)),
+                          Text("${subtotal.toStringAsFixed(2)} Tk", style: const TextStyle(fontSize: 18)),
+                        ],
+                      ),
+                      const SizedBox(height: 5),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Shipping fee:", style: TextStyle(fontSize: 18)),
+                          Text("${shippingFee.toStringAsFixed(2)} Tk", style: const TextStyle(fontSize: 18)),
+                        ],
+                      ),
+                      const Divider(height: 30, thickness: 1),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text("Total:", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                          Text(
+                            "${total.toStringAsFixed(2)} Tk",
+                            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.brown),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 20),
+                      InkWell(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const Payment()));
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          height: 55,
+                          decoration: BoxDecoration(
+                            color: const Color(0xffA78D78),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Center(
+                            child: Text(
+                              "Checkout",
+                              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
                 ),
               ],
             ),
-          ),
-          const Spacer(),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: InkWell(
-              onTap: () {
-                // [NAVIGATION]: Your Cart page theke Payment process shuru korar logic
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const Payment();
-                    },
-                  ),
-                );
-              },
-              child: Container(
-                width: double.infinity,
-                height: 55,
-                decoration: BoxDecoration(
-                  color: const Color(0xffA78D78),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Center(
-                  child: Text(
-                    "Checkout", // Order complete korar prothom dhap
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-        ],
-      ),
     );
   }
 }

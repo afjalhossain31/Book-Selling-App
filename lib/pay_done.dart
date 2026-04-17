@@ -1,4 +1,5 @@
 import 'package:book_app/bottom_bar.dart';
+import 'package:book_app/cart_manager.dart';
 import 'package:flutter/material.dart';
 
 class PayDone extends StatelessWidget {
@@ -23,6 +24,9 @@ class PayDone extends StatelessWidget {
 
               InkWell(
                 onTap: () {
+                  // [LOGIC]: Checkout confirm hoile Cart empty kore dewa uchit
+                  CartManager().clearCart();
+
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => const BottomBar()),
@@ -37,7 +41,7 @@ class PayDone extends StatelessWidget {
                     color: Colors.brown,
                     borderRadius: BorderRadius.circular(11),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       "Tap to Continue",
                       style: TextStyle(fontSize: 22, color: Colors.white),

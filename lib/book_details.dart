@@ -1,10 +1,10 @@
-import 'package:book_app/cart.dart';
+import 'package:book_app/cart_manager.dart';
 import 'package:flutter/material.dart';
 
 class BookDetails extends StatelessWidget {
-  final Map<String, String> book; // Boiyer data dhorar jonno variable
+  final Map<String, String> book;
 
-  const BookDetails({super.key, required this.book}); // Constructor-e data nissi
+  const BookDetails({super.key, required this.book});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,7 @@ class BookDetails extends StatelessWidget {
           children: [
             const Text("9:41", style: TextStyle(fontSize: 14)),
             Text(
-              book["title"] ?? "Book Details", // Dynamic title
+              book["title"] ?? "Book Details",
               style: const TextStyle(color: Colors.white, fontSize: 18),
             ),
             Row(
@@ -40,25 +40,25 @@ class BookDetails extends StatelessWidget {
               child: SizedBox(
                 height: 250,
                 width: 200,
-                child: Image.asset(book["image"] ?? "assets/images/b1.jpg", fit: BoxFit.contain), // Dynamic image
+                child: Image.asset(book["image"] ?? "assets/images/b1.jpg", fit: BoxFit.contain),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(15.0),
               child: Text(
                 "এই বইটি একটি চমৎকার সাহিত্য কর্ম। এর কাহিনী পাঠককে বিমোহিত করবে। "
-                "বইটির লেখক চমৎকারভাবে চরিত্রগুলো ফুটিয়ে তুলেছেন যা অত্যন্ত প্রশংসনীয়।", // Background description (Apatoto generic)
+                "বইটির লেখক চমৎকারভাবে চরিত্রগুলো ফুটিয়ে তুলেছেন যা অত্যন্ত প্রশংসনীয়।",
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontSize: 16),
               ),
             ),
             Text(
-              "Author: ${book["author"] ?? "Unknown"}", // Dynamic author
+              "Author: ${book["author"] ?? "Unknown"}",
               style: const TextStyle(fontSize: 22, color: Colors.black),
             ),
             const SizedBox(height: 10),
             Text(
-              "Price: ${book["price"] ?? "0.0"}", // Dynamic price
+              "Price: ${book["price"] ?? "0.0"}",
               style: const TextStyle(fontSize: 22, color: Colors.green, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
@@ -74,15 +74,21 @@ class BookDetails extends StatelessWidget {
             Center(
               child: InkWell(
                 onTap: () {
-                  // [LOGIC]: Selected boiyer data Cart page-e pathano hosse jeno price thikmoto calculate hoy
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return Cart(book: book);
-                      },
+                  // [LOGIC]: Book-ke Global Cart-e add korsi
+                  CartManager().addToCart(book);
+
+                  // [SUCCESS NOTIFICATION]: "Himu added to cart" eirokom message abar add korlam
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("${book["title"] ?? "Book"} added to cart!"),
+                      duration: const Duration(seconds: 1),
+                      backgroundColor: Colors.brown,
                     ),
                   );
+
+                  // [FIX]: Home page e japsa bhab (blur) dur korar jonno focus unfocus kora
+                  FocusScope.of(context).unfocus();
+                  Navigator.of(context).pop();
                 },
                 child: Container(
                   width: 200,
