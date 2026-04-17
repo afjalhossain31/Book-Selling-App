@@ -2,7 +2,10 @@ import 'package:book_app/cart.dart';
 import 'package:flutter/material.dart';
 
 class BookDetails extends StatelessWidget {
-  const BookDetails({super.key});
+  final Map<String, String> book; // Boiyer data dhorar jonno variable
+
+  const BookDetails({super.key, required this.book}); // Constructor-e data nissi
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,9 +16,9 @@ class BookDetails extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text("9:41", style: TextStyle(fontSize: 14)),
-            const Text(
-              "Book Details",
-              style: TextStyle(color: Colors.white, fontSize: 18),
+            Text(
+              book["title"] ?? "Book Details", // Dynamic title
+              style: const TextStyle(color: Colors.white, fontSize: 18),
             ),
             Row(
               children: const [
@@ -27,80 +30,85 @@ class BookDetails extends StatelessWidget {
           ],
         ),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(height: 5),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 80.0),
-            child: SizedBox(
-              height: 200,
-              width: 200,
-              child: Image.asset("assets/images/b1.jpg"),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(height: 15),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 80.0),
+              child: SizedBox(
+                height: 250,
+                width: 200,
+                child: Image.asset(book["image"] ?? "assets/images/b1.jpg", fit: BoxFit.contain), // Dynamic image
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Text(
-              "‘ওমর’ একটি ঐতিহাসিক গ্রন্থ যেখানে ইসলামের দ্বিতীয় খলিফা হযরত উমর (রাঃ)-এর জীবন, শাসনব্যবস্থা এবং ন্যায়পরায়ণতার কাহিনী বর্ণনা করা হয়েছে। "
-              "তিনি ইসলামের ইতিহাসে অন্যতম গুরুত্বপূর্ণ ব্যক্তিত্ব, যিনি তাঁর ন্যায়বিচার, সাহসিকতা এবং প্রশাসনিক দক্ষতার জন্য পরিচিত। "
-              "তার শাসনামলে ইসলামি সাম্রাজ্য ব্যাপকভাবে বিস্তৃত হয় এবং সমাজে ন্যায় ও শৃঙ্খলা প্রতিষ্ঠিত হয়।",
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Text(
+                "এই বইটি একটি চমৎকার সাহিত্য কর্ম। এর কাহিনী পাঠককে বিমোহিত করবে। "
+                "বইটির লেখক চমৎকারভাবে চরিত্রগুলো ফুটিয়ে তুলেছেন যা অত্যন্ত প্রশংসনীয়।", // Background description (Apatoto generic)
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 16),
+              ),
             ),
-          ),
-
-          Text(
-            "Author: বিভিন্ন ইতিহাসবিদ",
-            style: TextStyle(fontSize: 25, color: Colors.black),
-          ),
-
-          Text(
-            "Category: ইতিহাস",
-            style: TextStyle(fontSize: 25, color: Colors.black),
-          ),
-
-          Text(
-            "Rating: 4.7/5",
-            style: TextStyle(
-              fontSize: 25,
-              fontWeight: FontWeight.bold,
-              color: Colors.brown,
+            Text(
+              "Author: ${book["author"] ?? "Unknown"}", // Dynamic author
+              style: const TextStyle(fontSize: 22, color: Colors.black),
             ),
-          ),
-
-          Center(
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return const Cart();
-                    },
+            const SizedBox(height: 10),
+            Text(
+              "Price: ${book["price"] ?? "0.0"}", // Dynamic price
+              style: const TextStyle(fontSize: 22, color: Colors.green, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "Rating: 4.8/5",
+              style: const TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.brown,
+              ),
+            ),
+            const SizedBox(height: 30),
+            Center(
+              child: InkWell(
+                onTap: () {
+                  // [LOGIC]: Selected boiyer data Cart page-e pathano hosse jeno price thikmoto calculate hoy
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return Cart(book: book);
+                      },
+                    ),
+                  );
+                },
+                child: Container(
+                  width: 200,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: const Color(0xffA78D78),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                );
-              },
-
-              child: Container(
-                width: 150,
-                height: 50,
-                decoration: BoxDecoration(
-                  color: Color(0xffA78D78),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: Text(
-                    "Add To Cart",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                  child: const Center(
+                    child: Text(
+                      "Add To Cart",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
 }
+

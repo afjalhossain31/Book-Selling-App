@@ -143,10 +143,16 @@ class _HomeState extends State<Home> {
                       padding: const EdgeInsets.all(10),
                       child: InkWell(
                         onTap: () {
+                          // [LOGIC]: Specific book data pathano hosse static "Novel" card-er jonno
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const BookDetails(),
+                              builder: (context) => const BookDetails(book: {
+                                "image": "assets/images/b1.jpg",
+                                "title": "বাংলা উপন্যাস বই",
+                                "author": "Novel Author",
+                                "price": "\$33.00",
+                              }),
                             ),
                           );
                         },
@@ -277,14 +283,14 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget bookCard(Map book) {
+  Widget bookCard(Map<String, String> book) {
     return InkWell(
       onTap: () {
-        // [NAVIGATION LOGIC]: Boiyer upore click korle detail page-e niye jabe
+        // [NAVIGATION LOGIC]: Jete boiye click korbo, shei boiyer data mapping kore details-e pass korsi
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const BookDetails(),
+            builder: (context) => BookDetails(book: book),
           ),
         );
       },
@@ -300,7 +306,7 @@ class _HomeState extends State<Home> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8),
-                child: Image.asset(book["image"], fit: BoxFit.cover),
+                child: Image.asset(book["image"]!, fit: BoxFit.cover),
               ),
             ),
             Padding(
@@ -311,16 +317,16 @@ class _HomeState extends State<Home> {
                   const Text("Classics",
                       style: TextStyle(color: Colors.white70)),
                   Text(
-                    book["title"],
+                    book["title"]!,
                     style: const TextStyle(color: Colors.white, fontSize: 16),
                   ),
                   Text(
-                    book["author"],
+                    book["author"]!,
                     style: const TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                   const SizedBox(height: 5),
                   Text(
-                    book["price"],
+                    book["price"]!,
                     style: const TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ],

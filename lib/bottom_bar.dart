@@ -13,7 +13,12 @@ class BottomBar extends StatefulWidget {
 class _BottomBarState extends State<BottomBar> {
   int index = 0;
 
-  final List<Widget> screens = const [Home(), Category(), Cart(), Menu()];
+  final List<Widget> screens = [
+    const Home(),
+    const Category(),
+    const Cart(), // Dynamic data charai default Cart dekhabe
+    const Menu()
+  ];
 
   @override
   Widget build(BuildContext context) {
