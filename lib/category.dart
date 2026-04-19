@@ -72,6 +72,7 @@ class _CategoryState extends State<Category> {
       // Search faka hole shob category dekhabe
       results = allCategories;
     } else {
+      
       // Title, Subtitle, Author ba ISBN jekonotar sathe match korlei shera result nilam
       results = allCategories
           .where((cat) =>

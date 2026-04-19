@@ -54,11 +54,11 @@ class Menu extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Icon(Icons.language, color: Colors.green, size: 30),
+                child: Icon(Icons.book, color: Colors.green, size: 30), 
               ),
-              Text("Language", style: TextStyle(fontSize: 20)),
+              Text("Add a Book", style: TextStyle(fontSize: 20)),
             ],
-          ),
+          ), 
           SizedBox(height: 20),
           Row(
             children: [
@@ -66,7 +66,7 @@ class Menu extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Icon(
                   Icons.notifications,
-                  color: Colors.orange,
+                  color: Colors.orange, 
                   size: 30,
                 ),
               ),

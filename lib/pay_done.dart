@@ -8,10 +8,10 @@ class PayDone extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SizedBox.expand(
-        // 👈 takes full screen space
+        // takes full screen space
         child: Center(
           child: Column(
-            mainAxisSize: MainAxisSize.min, // 👈 keeps content compact
+            mainAxisSize: MainAxisSize.min, // keeps content compact
             children: [
               Image.asset("assets/images/tick.png", width: 150, height: 150),
 
