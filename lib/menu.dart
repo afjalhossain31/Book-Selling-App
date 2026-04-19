@@ -1,5 +1,7 @@
 import 'package:book_app/sign_in.dart';
 import 'package:book_app/profile.dart';
+import 'package:book_app/add_book_form.dart';
+import 'package:book_app/successfully_post.dart';
 import 'package:flutter/material.dart';
 
 class Menu extends StatelessWidget {
@@ -54,9 +56,19 @@ class Menu extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Icon(Icons.book, color: Colors.green, size: 30), 
+                child: Icon(Icons.add_box, color: Colors.green, size: 30), 
               ),
-              Text("Add a Book", style: TextStyle(fontSize: 20)),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const AddBookForm(),
+                    ),
+                  );
+                },
+                child: const Text("Add a Book", style: TextStyle(fontSize: 20)),
+              ),
             ],
           ), 
           SizedBox(height: 20),

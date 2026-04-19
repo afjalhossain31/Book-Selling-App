@@ -78,7 +78,7 @@ class Profile extends StatelessWidget {
 
                   SizedBox(height: 20),
 
-                  /// 🔴 RESET PASSWORD
+                  ///  RESET PASSWORD
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.all(15),

@@ -3,28 +3,29 @@ import 'package:book_app/payment.dart';
 import 'package:flutter/material.dart';
 
 class Cart extends StatefulWidget {
-  final Map<String, String>? book;
+  final Map<String, String>? book; // Cart e add kora book er data jodi direct pass kora hoy
 
-  const Cart({super.key, this.book});
+  const Cart({super.key, this.book}); // Constructor jekhane book data optional hisabe pass kora jete pare
 
   @override
-  State<Cart> createState() => _CartState();
+  State<Cart> createState() => _CartState(); 
 }
 
 class _CartState extends State<Cart> {
   @override
-  void initState() {
+  void initState() { 
     super.initState();
     // Add to cart jodi direct pass kora hoy 
-    if (widget.book != null) {
-      CartManager().addToCart(widget.book!);
+    if (widget.book != null) { // Jodi book data pass kora hoy, tahole seta cart e add kore dey
+    // null check kore book data ke addToCart method e pass kora hoy
+      CartManager().addToCart(widget.book!); 
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final cartItems = CartManager().items;
-    double subtotal = CartManager().calculateSubtotal();
+    final cartItems = CartManager().items; // CartManager theke cart items gula ke access kore dey
+    double subtotal = CartManager().calculateSubtotal(); // CartManager theke subtotal calculate kore dey
     double shippingFee = cartItems.isEmpty ? 0.0 : 70.0;
     double total = subtotal + shippingFee;
 
