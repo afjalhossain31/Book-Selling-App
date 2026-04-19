@@ -9,7 +9,7 @@ class BookTypeWidget extends StatelessWidget {
     super.key,
 
     ///class name
-    required this.bookType, //***constructure making
+    required this.bookType,
     required this.isSelected,
     required this.onTap,
   });

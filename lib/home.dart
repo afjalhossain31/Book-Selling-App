@@ -9,7 +9,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-  // Amader kache thaka shob boiyer main list 
+  // Sob boiyer main list eksathe
   final List<Map<String, String>> books = [
     {
       "image": "assets/images/b1.jpg",
@@ -60,6 +60,7 @@ class _HomeState extends State<Home> {
       results = books;
     } else {
       // Boiyer Title, Author ba ISBN-er sathe match korle results list-e add korsi
+
       results = books
           .where((book) =>
               book["title"]!
@@ -92,7 +93,7 @@ class _HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             const Text(
-              "9:41",
+              "9:30 AM",
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
             Row(
@@ -105,11 +106,12 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
+
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// 🔍 SEARCH BAR
+            /// SEARCH BAR / section
             Padding(
               padding: const EdgeInsets.all(16),
               child: TextField(
@@ -128,7 +130,7 @@ class _HomeState extends State<Home> {
               ),
             ),
 
-            /// 📚 FEATURE CARD (CLICKABLE IMAGE)
+            /// FEATURE CARD (CLICKABLE IMAGE)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Container(
@@ -286,7 +288,7 @@ class _HomeState extends State<Home> {
   Widget bookCard(Map<String, String> book) {
     return InkWell(
       onTap: () {
-        // [NAVIGATION LOGIC]: Jete boiye click korbo, shei boiyer data mapping kore details-e pass korsi
+        // Je boiye click korbo, shei boiyer data mapping kore details-e pass korsi
         Navigator.push(
           context,
           MaterialPageRoute(

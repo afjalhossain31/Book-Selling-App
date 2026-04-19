@@ -30,6 +30,7 @@ class BookDetails extends StatelessWidget {
           ],
         ),
       ),
+
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -74,10 +75,10 @@ class BookDetails extends StatelessWidget {
             Center(
               child: InkWell(
                 onTap: () {
-                  // [LOGIC]: Book-ke Global Cart-e add korsi
+                  //  Book-ke Global Cart-e add korsi
                   CartManager().addToCart(book);
 
-                  // [SUCCESS NOTIFICATION]: "Himu added to cart" eirokom message abar add korlam
+                  //"Himu added to cart" eirokom message abar add kore dilam
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text("${book["title"] ?? "Book"} added to cart!"),
@@ -86,7 +87,6 @@ class BookDetails extends StatelessWidget {
                     ),
                   );
 
-                  // [FIX]: Home page e japsa bhab (blur) dur korar jonno focus unfocus kora
                   FocusScope.of(context).unfocus();
                   Navigator.of(context).pop();
                 },

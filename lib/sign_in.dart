@@ -10,35 +10,39 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  // Input fields er text control korar jonno controllers
   final emailText = TextEditingController();
   final passwordText = TextEditingController();
 
-//sign-in logic for demonstration purposes. Replace with real authentication in production.
+  // Sign-in logic: ekhane email ebong password check kora hoy
   void _handleSignIn() {
     String email = emailText.text.trim();
     String password = passwordText.text.trim();
 
+    // Field khali thakle warning debe
     if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please enter both email and password")),
       );
       return;
     }
-    // This is a placeholder for real backend logic.
-    // Integrate Firebase Auth, Supabase, or a custom API here.
+    
+
+    // Valid user home page (BottomBar) e niye jabe
     if (email == "user@gmail.com" && password == "123456") {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const BottomBar()),
       );
     } else {
+      // Vul password hole error dekhabe
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Invalid email or password")),
       );
     }
   }
 
-
+  // Memory leak bachanir jonno dispose kora hoiche
   @override
   void dispose() {
     emailText.dispose();
@@ -54,6 +58,7 @@ class _SignInState extends State<SignIn> {
           height: MediaQuery.of(context).size.height,
           child: Column(
             children: [
+              // Prothom ongsho: Logo/Image
               Expanded(
                 flex: 2,
                 child: ColoredBox(
@@ -66,6 +71,7 @@ class _SignInState extends State<SignIn> {
                   ),
                 ),
               ),
+              // Dwitiyo part: Login Form
               Expanded(
                 flex: 3,
                 child: Column(
@@ -77,6 +83,7 @@ class _SignInState extends State<SignIn> {
                           TextStyle(fontSize: 33, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 30),
+                    // Email Input Field
                     SizedBox(
                       width: 300,
                       height: 50,
@@ -99,6 +106,7 @@ class _SignInState extends State<SignIn> {
                       ),
                     ),
                     const SizedBox(height: 15),
+                    // Password Input Field
                     SizedBox(
                       height: 50,
                       width: 300,
@@ -122,6 +130,7 @@ class _SignInState extends State<SignIn> {
                       ),
                     ),
                     const SizedBox(height: 10),
+                    // Forget Password Link
                     InkWell(
                       onTap: () {
                         Navigator.push(
@@ -137,6 +146,7 @@ class _SignInState extends State<SignIn> {
                       ),
                     ),
                     const SizedBox(height: 28),
+                    // Sign In Button
                     InkWell(
                       onTap: _handleSignIn,
                       child: Container(

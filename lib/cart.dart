@@ -15,7 +15,7 @@ class _CartState extends State<Cart> {
   @override
   void initState() {
     super.initState();
-    // Add to cart jodi direct pass kora hoy (previous logic maintain)
+    // Add to cart jodi direct pass kora hoy 
     if (widget.book != null) {
       CartManager().addToCart(widget.book!);
     }
