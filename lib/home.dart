@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:book_app/book_details.dart';
 
@@ -8,8 +9,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final TextEditingController searchController = TextEditingController();
+  String _searchKeyword = "";
 
-  // Sob boiyer main list eksathe
+  // Static list for local books (optional, used by Latest/Upcoming)
   final List<Map<String, String>> books = [
     {
       "image": "assets/images/b1.jpg",
@@ -41,50 +44,10 @@ class _HomeState extends State<Home> {
     },
   ];
 
-  // Screen-e jeta display korbo sheita filtered list create korlam
-  List<Map<String, String>> filteredBooks = [];
-  final TextEditingController searchController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    // App start haoyar shomoy shuru-te shob boi-e dekhabe
-    filteredBooks = List.from(books);
-  }
-
-  // Search filter korar jonno logic add korlam
-  void _runFilter(String enteredKeyword) {
-    List<Map<String, String>> results = [];
-    if (enteredKeyword.isEmpty) {
-      // Jodi search box faka thake, taile main list results-e rakhbo
-      results = books;
-    } else {
-      // Boiyer Title, Author ba ISBN-er sathe match korle results list-e add korsi
-
-      results = books
-          .where((book) =>
-              book["title"]!
-                  .toLowerCase()
-                  .contains(enteredKeyword.toLowerCase()) ||
-              book["author"]!
-                  .toLowerCase()
-                  .contains(enteredKeyword.toLowerCase()) ||
-              book["isbn"]!
-                  .toLowerCase()
-                  .contains(enteredKeyword.toLowerCase()))
-          .toList();
-    }
-
-    // Search results peye gele state/UI update korar jonno setState use korsi
-    setState(() {
-      filteredBooks = results;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffF5F5F5),
+      backgroundColor: const Color(0xffF5F5F5),
       appBar: AppBar(
         backgroundColor: const Color(0xff8B5E34),
         elevation: 0,
@@ -106,7 +69,6 @@ class _HomeState extends State<Home> {
           ],
         ),
       ),
-
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,12 +78,16 @@ class _HomeState extends State<Home> {
               padding: const EdgeInsets.all(16),
               child: TextField(
                 controller: searchController,
-                onChanged: (value) => _runFilter(value), // Proti word type korlei filter hobe
+                onChanged: (value) {
+                  setState(() {
+                    _searchKeyword = value.toLowerCase();
+                  });
+                },
                 decoration: InputDecoration(
-                  hintText: "Search by title, author or ISBN",
+                  hintText: "Search by title or author",
                   filled: true,
                   fillColor: Colors.grey[300],
-                  suffixIcon: Icon(Icons.search),
+                  suffixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: BorderSide.none,
@@ -136,7 +102,7 @@ class _HomeState extends State<Home> {
               child: Container(
                 height: 140,
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 131, 118, 198),
+                  color: const Color.fromARGB(255, 131, 118, 198),
                   borderRadius: BorderRadius.circular(15),
                 ),
                 child: Row(
@@ -145,7 +111,6 @@ class _HomeState extends State<Home> {
                       padding: const EdgeInsets.all(10),
                       child: InkWell(
                         onTap: () {
-                          // [LOGIC]: Specific book data pathano hosse static "Novel" card-er jonno
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -161,34 +126,29 @@ class _HomeState extends State<Home> {
                         child: Image.asset("assets/images/b1.jpg"),
                       ),
                     ),
-
                     Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(10),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               "Novel",
                               style: TextStyle(color: Colors.white70),
                             ),
-
-                            SizedBox(height: 5),
-
-                            Text(
+                            const SizedBox(height: 5),
+                            const Text(
                               "বাংলা উপন্যাস বই",
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
                               ),
                             ),
-
-                            Spacer(),
-
+                            const Spacer(),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
+                                const Text(
                                   "\$33.00",
                                   style: TextStyle(
                                     color: Colors.white,
@@ -196,9 +156,8 @@ class _HomeState extends State<Home> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-
                                 Container(
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                     horizontal: 8,
                                     vertical: 4,
                                   ),
@@ -206,7 +165,7 @@ class _HomeState extends State<Home> {
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(6),
                                   ),
-                                  child: Text("12% off"),
+                                  child: const Text("12% off"),
                                 ),
                               ],
                             ),
@@ -219,35 +178,64 @@ class _HomeState extends State<Home> {
               ),
             ),
 
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
 
-            sectionTitle("Top Books"),
+            sectionTitle("Books from Firebase"),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: GridView.builder(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: filteredBooks.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.65,
-                ),
-                itemBuilder: (context, index) {
-                  return bookCard(filteredBooks[index]);
-                },
-              ),
+            // StreamBuilder: Firestore-er 'books' collection theke live data load korar jonno add kora hoyeche
+            StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance.collection('books').snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return const Center(child: Text("Something went wrong"));
+                }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator()); // Data load hoyar somoy loader dekhabe
+                }
+
+                // Firestore theke data niye asha hochche
+                final allDocs = snapshot.data!.docs;
+                
+                // Search keyword-er upor base kore book-gulo filter kora hochche
+                final filteredDocs = allDocs.where((doc) {
+                  final data = doc.data() as Map<String, dynamic>;
+                  final title = (data['title'] ?? "").toString().toLowerCase();
+                  final author = (data['author'] ?? "").toString().toLowerCase();
+                  return title.contains(_searchKeyword) ||
+                      author.contains(_searchKeyword);
+                }).toList();
+
+                if (filteredDocs.isEmpty) {
+                  return const Center(child: Text("No books found"));
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: filteredDocs.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.65,
+                    ),
+                    itemBuilder: (context, index) {
+                      final data = filteredDocs[index].data() as Map<String, dynamic>;
+                      
+                      // dynamic data-ke String map-e convert kora hochche jate UI function accept kore
+                      final bookMap = {
+                        "image": (data['image'] ?? "assets/images/b1.jpg").toString(),
+                        "title": (data['title'] ?? "Untitled").toString(),
+                        "author": (data['author'] ?? "Unknown").toString(),
+                        "price": (data['price'] ?? "0.00").toString(),
+                      };
+                      return bookCard(bookMap);
+                    },
+                  ),
+                );
+              },
             ),
-
-            const SizedBox(height: 20),
-
-            sectionTitle("Latest Books"),
-            horizontalBooks(),
-
-            const SizedBox(height: 20),
-
-            sectionTitle("Upcoming Books"),
-            horizontalBooks(),
 
             const SizedBox(height: 20),
           ],
@@ -277,15 +265,18 @@ class _HomeState extends State<Home> {
       height: 230,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: filteredBooks.length,
+        itemCount: books.length,
         itemBuilder: (context, index) {
-          return bookCard(filteredBooks[index]);
+          return bookCard(books[index]);
         },
       ),
     );
   }
 
   Widget bookCard(Map<String, String> book) {
+    // Image URL check korchi, jate Network image naki Asset image seta bujha jay
+    bool isNetworkImage = book["image"]!.startsWith('http');
+
     return InkWell(
       onTap: () {
         // Je boiye click korbo, shei boiyer data mapping kore details-e pass korsi
@@ -308,7 +299,11 @@ class _HomeState extends State<Home> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8),
-                child: Image.asset(book["image"]!, fit: BoxFit.cover),
+                child: isNetworkImage
+                    ? Image.network(book["image"]!, fit: BoxFit.cover, errorBuilder: (context, error, stackTrace) {
+                        return Image.asset("assets/images/b1.jpg", fit: BoxFit.cover);
+                      })
+                    : Image.asset(book["image"]!, fit: BoxFit.cover),
               ),
             ),
             Padding(

@@ -92,7 +92,7 @@ class _PaymentState extends State<Payment> {
 
                         Text(methods[index]["name"]!),
 
-                        /// ✅ selection indicator
+                        /// selection indicator
                         if (isSelected)
                           Icon(Icons.check_circle, color: Colors.brown),
                       ],

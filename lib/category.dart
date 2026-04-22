@@ -55,7 +55,8 @@ class _CategoryState extends State<Category> {
   ];
 
   // Search er por jeta dekhabo shei list
-  List<Map<String, String>> displayedCategories = [];
+  List<Map<String, 
+  String>> displayedCategories = [];
   final TextEditingController searchController = TextEditingController();
 
   @override

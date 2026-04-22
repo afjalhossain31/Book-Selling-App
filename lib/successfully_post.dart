@@ -1,4 +1,5 @@
 import 'package:book_app/bottom_bar.dart';
+
 import 'package:flutter/material.dart';
 
 class SuccessfullyPost extends StatelessWidget {
@@ -19,6 +20,7 @@ class SuccessfullyPost extends StatelessWidget {
                 color: Colors.green,
                 size: 100,
               ),
+
               const SizedBox(height: 20),
               const Text(
                 "Your post is successfully done!",
@@ -29,6 +31,7 @@ class SuccessfullyPost extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
+
               const SizedBox(height: 10),
               const Text(
                 "Your book is now live in the marketplace.",
@@ -38,6 +41,7 @@ class SuccessfullyPost extends StatelessWidget {
                   color: Colors.grey,
                 ),
               ),
+
               const SizedBox(height: 40),
               SizedBox(
                 width: 200,

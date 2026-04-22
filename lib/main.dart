@@ -1,8 +1,17 @@
 import 'package:book_app/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 // App er entry point /main function
-void main() {
+void main() async {
+  
+  WidgetsFlutterBinding.ensureInitialized();
+  // Firebase initialize kora hocche
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const LeatsRead());
 }
 

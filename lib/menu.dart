@@ -2,6 +2,7 @@ import 'package:book_app/sign_in.dart';
 import 'package:book_app/profile.dart';
 import 'package:book_app/add_book_form.dart';
 import 'package:book_app/successfully_post.dart';
+
 import 'package:flutter/material.dart';
 
 class Menu extends StatelessWidget {
@@ -42,7 +43,7 @@ class Menu extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return const Profile();
+                        return const Profile(); // route class
                       },
                     ),
                   );

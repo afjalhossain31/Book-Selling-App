@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "84573574582",
+    "project_id": "book-selling-e3de4",
+    "storage_bucket": "book-selling-e3de4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84573574582:android:c5ddaa8407dc6f61dc1d17",
+        "android_client_info": {
+          "package_name": "com.example.book_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDWTHSSv-QHwcmZ3l1dKHA7DUiCKVEqV-k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
