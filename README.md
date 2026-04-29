@@ -14,6 +14,8 @@
 ## Design (Figma)
 🔗 [View Figma Design](https://www.figma.com/design/yqtJEg4fTHrXUebyvOarDP/software?node-id=0-1&t=CuSa5RksMHVlFnTZ-0)
 
+<div align="center">
+
 ## ✨ Features
 
 - 📖 Browse books by category  
@@ -23,6 +25,8 @@
 - 🔐 Firebase Authentication  
 - ☁️ Real-time Database  
 - 📱 Clean & responsive UI  
+
+</div>
 
 ## 🛠️ Tech Stack
 
