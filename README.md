@@ -18,13 +18,13 @@
 
 ## ✨ Features
 
-- 📖 Browse books by category  
-- 🔍 Search and filter system  
-- 🛒 Add to cart functionality  
-- 💳 Simple payment system  
-- 🔐 Firebase Authentication  
-- ☁️ Real-time Database  
-- 📱 Clean & responsive UI  
+ 📖 Browse books by category  
+ 🔍 Search and filter system  
+ 🛒 Add to cart functionality  
+ 💳 Simple payment system  
+ 🔐 Firebase Authentication  
+ ☁️ Real-time Database  
+ 📱 Clean & responsive UI  
 
 </div>
 
