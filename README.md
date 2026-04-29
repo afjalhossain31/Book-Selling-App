@@ -8,4 +8,7 @@ A New Flutter project.
   <img src="assets/app/A.png" width="300"/>
   <img src="assets/app/B.png" width="300"> 
   <img src="assets/app/C.png" width="300">
+  <img src="assets/app/D.png" width="300">
+  <img src="assets/app/E.png" width="300">
+  <img src="assets/app/F.png" width="300">
 </p>
